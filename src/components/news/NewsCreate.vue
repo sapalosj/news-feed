@@ -19,7 +19,9 @@
                     <textarea v-model="form.content" class="form-control" id="content" rows="3"></textarea>
                 </div>
                  <div class="mb-3">
-
+                       <label class="form-label">Tags</label>
+                  
+                     <smart-tagz :on-changed="tagValue"/>
                 </div>
                 <button class="btn btn-secondary" @click="onSubmit">Create</button>
             </div>
@@ -36,17 +38,17 @@ import Swal from 'sweetalert2';
 import {DateHelper} from '@/core/helpers/date-helper';
 import Controls from '@/components/Controls.vue'
 import IPost from '@/core/interfaces/post.interface'
-
-
+import { SmartTagz } from "smart-tagz";
+import "smart-tagz/dist/smart-tagz.css";
 
 export default defineComponent({
     name:"NewsCreate",
     components:{
         Controls,
+        SmartTagz
     },
     setup() {
-        const tag = ref('')
-        const tags = ref([])
+        const tag = ref([]);
         const form = ref({
             title:'',
             author:'',
@@ -59,7 +61,8 @@ export default defineComponent({
                 title : form.value.title,
                 author : form.value.author,
                 content: form.value.content,    
-                date : DateHelper.getCurrentDate()
+                date : DateHelper.getCurrentDate(),
+                tags: tag.value
             }
             const res = await PostService.insertPost(post);
             if(res.statusBool){
@@ -69,9 +72,15 @@ export default defineComponent({
             }
         }
 
+        const tagValue = (tagsArray) => {
+            tag.value = tagsArray
+        }
+
         return{
             form,
-            onSubmit
+            onSubmit,
+            tag,
+            tagValue
         }
     },
 })

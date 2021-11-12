@@ -2,7 +2,7 @@
     <div class="card mx-auto post-card my-2">
         <div class="card-body">
             <div class="card-title">
-                <h5 class="d-inline">{{ postContent.title}}</h5>
+                <h3 class="d-inline">{{ postContent.title}}</h3>
                 <div class="float-end details-text">
                      <span class="mx-2">
                         <i class="fas fa-user-circle"></i>
@@ -21,8 +21,9 @@
             
         </div>
         <div class="card-footer">
-            <span class="badge rounded-pill bg-secondary mx-1">#Trending</span>
-            <span class="badge rounded-pill bg-secondary mx-1">#WTF</span>
+            <span v-for="(tag,index) in postContent.tags" :key="index">
+                <span class="badge rounded-pill bg-secondary mx-1">#{{tag}}</span>
+            </span>
             <span class="float-end">
                 <button class="btn btn-outline-secondary mx-1" @click="toggleView(postContent.id)">
                    <i class="fas fa-external-link-alt"></i>
@@ -63,6 +64,10 @@ export default defineComponent({
         },
         date: {
             type: String
+        },
+        tags: {
+            type: Array,
+            default: []
         }
     },
     setup(props,{emit}) {

@@ -1,18 +1,48 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div class="container">
+    <div class="row">
+        <div class="col-sm-6 my-auto"> 
+          <h1>Stephen John Sapalo</h1>
+          <h4>News Feed Creator</h4>
+          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit molestias, numquam facilis ea consectetur</p>
+          <button class="btn btn-outline-light btn-lg" @click="redirect">Get Started!</button>
+        </div>
+      <div class="col-sm-6">
+        <img src="../assets/socmed.png" alt="Mark Zuckerberg?">
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import { defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
+
 
 export default defineComponent({
   name: 'Home',
-  components: {
-    HelloWorld,
-  },
+  setup(){
+    const route = useRouter();
+
+    const redirect = () => {
+      route.push('/news');
+    }
+
+    return{
+      redirect
+    }
+  }
 });
 </script>
+
+<style scoped>
+  img{
+    width:95%;
+    height: 95%;
+  }
+  button{
+    border-radius: 20px ;
+  }
+</style>
+
+

@@ -1,0 +1,25 @@
+{
+  "posts": [
+    {
+      "title": "Updated Title",
+      "author": "Updated Author",
+      "content": "asdaasdsadasdasadasdsa",
+      "date": "11/12/2021",
+      "id": 1
+    },
+    {
+      "title": "asdasdasd",
+      "author": "ASDADASD",
+      "content": "ASDASDADASDAD",
+      "date": "11/12/2021",
+      "id": 2
+    },
+    {
+      "title": "dSDASDASDADSA",
+      "author": "ASDADASD",
+      "content": "ASDASDADASDAD",
+      "date": "11/12/2021",
+      "id": 2
+    }
+  ]
+}

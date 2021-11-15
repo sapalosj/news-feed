@@ -3,13 +3,24 @@
     {
       "title": "Tempo Runs",
       "author": "Stephen John Sapalo",
-      "content": "Tempo run is a great workout to build lactate threshold",
+      "content": "Tempo run is a great workout to build lactate thresholds",
       "date": "11/12/2021",
       "tags": [
         "runng",
         "marathon"
       ],
       "id": 1
+    },
+    {
+      "title": "Long Runs",
+      "author": "Stephen John Sapalo",
+      "content": "Long runs is essential to build your aerobic base!\nWow!",
+      "date": "11/12/2021",
+      "tags": [
+        "long runs",
+        "running"
+      ],
+      "id": 2
     }
   ]
 }

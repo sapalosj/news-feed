@@ -1,5 +1,5 @@
 <template>
-    <controls />
+    <navigation-control />
     <div class="container">
         <div class="card mx-auto">
             <div class="card-header">
@@ -21,25 +21,21 @@
 </template>
 
 <script lang="ts">
-import Controls from '@/components/Controls.vue'
-import IPost from '@/core/interfaces/post.interface';
-import { PostService } from '@/core/services/post.service';
-import { defineComponent, onMounted, PropType,ref } from 'vue'
+import NavigationControl from '@/components/navigation-control.vue'
+import { defineComponent, onMounted } from 'vue'
+import usePostFetchById from '@/core/composables/post/usePostFetchById'
 import {useRoute} from 'vue-router'
 
 export default defineComponent({
-    components: { Controls },
+    name: 'NewsView',
+    components: { NavigationControl },
     setup() {
+
+        const {post,fetchPostById} = usePostFetchById()
         const route = useRoute();
-        const post = ref({
-            title:'',
-            author:'',
-            content:'',
-            date:''
-        });
+        
         onMounted( async () => {
-           const result =  await PostService.fetchPostById(route.params.id).then(res =>  res.json())
-            post.value = result
+           await fetchPostById(Number(route.params.id[0]))
         })
 
         return{

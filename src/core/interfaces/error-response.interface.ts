@@ -1,7 +1,8 @@
-
+import ErrorCode from '@/core/enums/error-code.enum'
 interface IErrorResponse {
     message: string,
-    statusBool: boolean
+    status: boolean,
+    errorCode : ErrorCode
 }
 
 export default IErrorResponse

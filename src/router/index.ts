@@ -1,35 +1,30 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Home from '../views/Home.vue'
-import News from '@/views/News.vue'; 
-import NewsCreate from '@/components/news/NewsCreate.vue';
-import NewsView from '@/components/news/NewsView.vue';
-import NewsEdit from '@/components/news/NewsEdit.vue';
+import Home from '@/views/home.vue'
+import News from '@/views/news.vue'; 
+import NewsCreate from '@/components/news/news-create.vue';
+import NewsView from '@/components/news/news-view.vue';
+import RouteName from '@/core/enums/route-name.enum';
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
+    name: RouteName.Home,
     component: Home
   },
   {
     path: '/news',
-    name: 'News',
+    name:  RouteName.News,
     component: News
   },
   {
     path: '/news/:id',
-    name: 'NewsView',
-   
+    name:  RouteName.NewsView,
     component: NewsView
   },
   {
     path: '/create',
-    name: 'NewsCreate',
+    name:  RouteName.NewsCreate,
     component: NewsCreate
-  },
-  {
-    path: '/edit/:id',
-    name: 'NewsEdit',
-    component: NewsEdit
   }
 ]
 

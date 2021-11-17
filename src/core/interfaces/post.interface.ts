@@ -1,7 +1,7 @@
 
 
 interface IPost {
-    id?: number | string,
+    id?: number,
     title: string,
     author: string,
     content: string,

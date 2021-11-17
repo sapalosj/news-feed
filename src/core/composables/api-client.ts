@@ -1,5 +1,5 @@
 import environment from "@/environment/environment";
-import IApiRequest  from "./interfaces/api.interface";
+import IApiRequest  from "@/core/interfaces/api.interface";
 
 
 export function api (request: IApiRequest) {

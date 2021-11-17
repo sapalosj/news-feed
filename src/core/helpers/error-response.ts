@@ -1,10 +1,12 @@
 import ErrorCode from '../enums/error-code.enum';
+import ErrorMessage from '../enums/error-message.enum';
 import IErrorResponse from '../interfaces/error-response.interface';
 
-const errorResponse = (message: string) => {
+const errorResponse = (message: ErrorMessage,status:boolean,errorCode:ErrorCode) => {
     const response: IErrorResponse = {
         message,
-        statusBool:false
+        status,
+        errorCode
     };
     return response;
 };

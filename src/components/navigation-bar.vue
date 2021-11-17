@@ -8,12 +8,6 @@
             <li class="nav-item">
                 <a class="nav-link active" href="#" @click="clickHome">Home</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link transparent" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link transparent" href="#">Link</a>
-            </li>
         </ul>
     </nav>
 </template>
@@ -22,6 +16,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import {useRouter} from 'vue-router'
+import RouteName from '@/core/enums/route-name.enum'
 
 export default defineComponent({
     name: "NavigationBar",
@@ -29,7 +24,7 @@ export default defineComponent({
        const route = useRouter();
 
        const clickHome = () => {
-           route.push({path:'/'})
+           route.push({name:RouteName.Home})
        }
 
        return{

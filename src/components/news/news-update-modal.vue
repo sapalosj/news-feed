@@ -22,7 +22,7 @@
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" @click="updatePost" >Update</button>
+              <button type="button" class="btn btn-primary" @click="update" >Update</button>
           </div>
         </div>
     </div>
@@ -32,9 +32,8 @@
 
 <script lang="ts">
 import IPost from '@/core/interfaces/post.interface';
-import { PostService } from '@/core/services/post.service';
+import usePostUpdate from '@/core/composables/post/usePostUpdate'
 import { defineComponent, PropType,ref } from 'vue'
-import {useRouter} from 'vue-router'
 import Swal from 'sweetalert2'
 
 export default defineComponent({
@@ -53,25 +52,21 @@ export default defineComponent({
     },
     setup(props,{emit}) {
         const content = ref(props.post);
-        
-        const updatePost = async () => {
-          const post = {
-                title : content.value.title,
-                author : content.value.author,
-                content: content.value.content,
-          }
-          const res = await PostService.updatePost(content.value.id,post)     
-          if(res.statusBool){
+
+        const {updatePost} = usePostUpdate();
+
+        const update = async () => {
+          const res = await updatePost(content)
+          if(res.status){
             Swal.fire('Updated!', res.message,'success')
             emit('onPostUpdate')
+          }else{
+             Swal.fire('Error', res.message,'error')
           }
         }
-
-       
-
         return {
           content,
-          updatePost
+          update
         }
     },
 })

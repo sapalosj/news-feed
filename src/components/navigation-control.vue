@@ -24,9 +24,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import {useRouter} from 'vue-router'
+import RouteName from '@/core/enums/route-name.enum'
 
 export default defineComponent({
-    name: "Controls",
+    name: "NavigationControl",
     emits:['onSearch'],
     setup(props,{emit}) {
         const route = useRouter();
@@ -40,7 +41,7 @@ export default defineComponent({
         }
 
         const addPost = () => {
-            route.push('/create');
+            route.push({name:RouteName.NewsCreate});
         }
 
         return{

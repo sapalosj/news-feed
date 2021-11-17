@@ -17,6 +17,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
+import RouteName from '@/core/enums/route-name.enum'
 
 
 export default defineComponent({
@@ -25,7 +26,7 @@ export default defineComponent({
     const route = useRouter();
 
     const redirect = () => {
-      route.push('/news');
+      route.push({name:RouteName.News});
     }
 
     return{

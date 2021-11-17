@@ -2,7 +2,7 @@ import environment from "@/environment/environment";
 import IApiRequest  from "@/core/interfaces/api.interface";
 
 
-export function api (request: IApiRequest) {
+export function api (request: IApiRequest) : Promise<Response>  {
 
     if(request.method == 'GET'){
         return fetch(

@@ -52,6 +52,7 @@ import { SmartTagz } from "smart-tagz";
 import "smart-tagz/dist/smart-tagz.css";
 import RouteName from '@/core/enums/route-name.enum'
 import usePostCreate from '@/core/composables/post/usePostCreate'
+import IPost from '@/core/interfaces/post.interface';
 
 export default defineComponent({
     name:"NewsCreate",
@@ -61,15 +62,16 @@ export default defineComponent({
     },
     setup() {
         const {insertPost} = usePostCreate();
-        const tag = ref([]);
-        const form = ref({
+        const tag  = ref<string[]>(['']);
+        const form  = ref<IPost>({
             title:'',
             author:'',
-            content:''
+            content:'',
+            date:''
         });
         const router = useRouter();
 
-        const onSubmit = async () => {
+        const onSubmit = async () : Promise<void> => {
             if( isFormValid() ){
                 const res = await insertPost(form,tag)
                 if(res.status){
@@ -80,7 +82,7 @@ export default defineComponent({
             }
         }
 
-        const isFormValid = () => {
+        const isFormValid  = () : boolean => {
             let forms = document.querySelectorAll('.has-validation');
             let valid = true;
             Array.prototype.slice.call(forms).forEach(function (form) {
@@ -94,14 +96,13 @@ export default defineComponent({
         }
 
 
-        const tagValue = (tagsArray) => {
+        const tagValue = (tagsArray : string[]) => {
             tag.value = tagsArray
         }
 
         return{
             form,
             onSubmit,
-            tag,
             tagValue
         }
     },

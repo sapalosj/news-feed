@@ -11,13 +11,13 @@ import IErrorResponse from '@/core/interfaces/error-response.interface';
 
 const usePostCreate = () => {
 
-    const insertPost = async (form,tag) : Promise<IMessageResponse|IErrorResponse> => {
+    const insertPost = async (form,tag:string[]) : Promise<IMessageResponse|IErrorResponse> => {
         const post : IPost = {
             title : form.value.title,
             author : form.value.author,
             content: form.value.content,    
             date : DateHelper.getCurrentDate(),
-            tags: tag.value
+            tags: tag
         }
         try{
              await api({

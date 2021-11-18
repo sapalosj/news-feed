@@ -47,7 +47,7 @@ import usePostDelete from '@/core/composables/post/usePostDelete'
 
 export default defineComponent({
     name: "PostList",
-    emits: ['postDeleted','toggleView','toggleUpdate'],
+    emits: ['post-deleted','toggle-view','toggle-update'],
     props:{
         id: {
             type: Number
@@ -88,18 +88,18 @@ export default defineComponent({
                 if(result.isConfirmed){
                     const res = await deletePost(id);
                     if(res.status){
-                        emit('postDeleted')
+                        emit('post-deleted')
                     }
                 }
             })
         }
 
         const toggleView = (id:number) => {
-            emit('toggleView',id)
+            emit('toggle-view',id)
         }
 
         const toggleUpdate = (id:number) => {
-            emit('toggleUpdate',id)
+            emit('toggle-update',id)
         }
 
         return{

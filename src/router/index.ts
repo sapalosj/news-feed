@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '@/views/home.vue'
 import News from '@/views/news.vue'; 
-import NewsCreate from '@/components/news/news-create.vue';
 import NewsView from '@/components/news/news-view.vue';
 import RouteName from '@/core/enums/route-name.enum';
 
@@ -20,11 +19,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/news/:id',
     name:  RouteName.NewsView,
     component: NewsView
-  },
-  {
-    path: '/create',
-    name:  RouteName.NewsCreate,
-    component: NewsCreate
   }
 ]
 

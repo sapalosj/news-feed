@@ -16,11 +16,13 @@ const usePostFetchById = () => {
         date:''
     });
 
+
     const modalContent = reactive <IPost>({
         title: '',
         author:'',
         content:'',
-        date:''
+        date:'',
+        tags: [] 
     })
 
 
@@ -40,13 +42,22 @@ const usePostFetchById = () => {
             modalContent.author = result.author
             modalContent.content = result.content
             modalContent.date = result.date
+            modalContent.tags = result.tags
         }
         catch{
             error.value = errorResponse(ErrorMessage.INTERNAL_SERVER_ERROR,false,ErrorCode.INTERNAL_SERVER_ERROR)
         }
     }
+    const clearModalContent = () => {
+        modalContent.id = undefined
+        modalContent.title = ''
+        modalContent.author = ''
+        modalContent.content = ''
+        modalContent.date = ''
+        modalContent.tags = []
+    }
 
-    return{post,error,modalContent,fetchPostById}
+    return{post,error,modalContent,fetchPostById,clearModalContent}
 }
 
 export default usePostFetchById

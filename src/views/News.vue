@@ -1,40 +1,43 @@
 <template>
-    <navigation-control @onSearch="search"/>
+    <navigation-control @on-search="search" @add-post="showCreateModal"/>
     <div class="container">
         <div class="row">
             <div class="col-sm-12 mx-auto" v-for="post in filterList" :key="post.id">
-                <post-list v-bind="post" @postDeleted="fetchPosts" @toggleView="viewPost" @toggleUpdate="showUpdateModal"/>
+                <post-list v-bind="post" @post-deleted="fetchPosts" @toggle-view="viewPost" @toggle-update="showUpdateModal"/>
             </div>
         </div>
     </div>
-    <news-update-modal :post="modalContent" @onPostUpdate="fetchPosts"/>
+    <news-update-create-modal :post="modalContent" :action="action" @on-post-update="fetchPosts" />
 </template>
 
 
 <script lang="ts">
-import { defineComponent,ref,computed,onMounted} from 'vue'
+import { defineComponent,ref,computed,onMounted,reactive} from 'vue'
 import PostList from '@/components/news/post-list.vue'
-import NewsUpdateModal from '@/components/news/news-update-modal.vue'
+import NewsUpdateCreateModal from '@/components/news/news-update-create-modal.vue'
 import {useRouter} from 'vue-router';
 import NavigationControl from '@/components/navigation-control.vue'
 import RouteName from '@/core/enums/route-name.enum'
 import usePostFetchAll from '@/core/composables/post/usePostFetchAll'
 import usePostFetchById from '@/core/composables/post/usePostFetchById'
+import PostAction from '@/core/enums/post-actions.enum';
 
 
 
 export default defineComponent({
     name:"News",
     components:{
-        NewsUpdateModal,
+        NewsUpdateCreateModal,
         PostList,
         NavigationControl
     },
     setup() {
 
         const {postLists,fetchPosts} = usePostFetchAll()
-        const {modalContent,fetchPostById} = usePostFetchById();
-        const searchItem = ref('');
+        const {modalContent,fetchPostById,clearModalContent} = usePostFetchById();
+        const searchItem  = ref<string>('');
+        const action  = ref<string>(PostAction.CREATE)
+        const showTag = ref<boolean>(true)
         const router = useRouter();
         
 
@@ -55,18 +58,27 @@ export default defineComponent({
             router.push({name:RouteName.NewsView,params:{id:postId}});
         }
 
+        const showCreateModal = () => {
+            showTag.value = true
+            clearModalContent()
+            action.value = PostAction.CREATE
+        }
+
         const showUpdateModal = async (postId:number) => {
+            action.value = PostAction.UPDATE
             fetchPostById(postId)
         }
 
+    
         return {
-            postLists,
             modalContent,
             viewPost,
             showUpdateModal,
+            showCreateModal,
             fetchPosts,
             filterList,
-            search
+            search,
+            action
         }
     }
 })

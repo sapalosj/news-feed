@@ -11,12 +11,13 @@ import IMessageResponse from '@/core/interfaces/message-response.interface';
 
 const usePostFetchAll = () => {
    
-    const updatePost = async (form:any) : Promise<IMessageResponse|IErrorResponse> => {
+    const updatePost = async (form,tag:string[]) : Promise<IMessageResponse|IErrorResponse> => {
         const post : IPost = {
             title : form.value.title,
             author : form.value.author,
             content: form.value.content,    
             date : DateHelper.getCurrentDate(),
+            tags : tag
         }
         try {
             await api({
@@ -24,7 +25,6 @@ const usePostFetchAll = () => {
                 url: `posts/${form.value.id}`,
                 data:post
             })
-
             return messageResponse('Post Updated',true)
         } catch {
             return errorResponse(ErrorMessage.INTERNAL_SERVER_ERROR,false,ErrorCode.INTERNAL_SERVER_ERROR)

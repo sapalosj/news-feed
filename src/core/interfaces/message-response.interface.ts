@@ -1,6 +1,6 @@
 interface IMessageResponse  {
     message:string,
-    statusBool: boolean
+    status: boolean
 }
 
 export default IMessageResponse

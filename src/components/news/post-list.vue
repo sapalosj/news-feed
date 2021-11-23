@@ -25,14 +25,14 @@
                 <span class="badge rounded-pill bg-secondary mx-1">#{{tag}}</span>
             </span>
             <span class="float-end">
-                <button class="btn btn-outline-secondary mx-1" @click="toggleView(postContent.id)">
+                <button class="btn btn-outline-secondary mx-1" @click="toggleView(postContent.id!)">
                    <i class="fas fa-external-link-alt"></i>
                 </button>
                 <!-- data-bs-toggle="modal" data-bs-target="#staticBackdrop" -->
-                 <button class="btn btn-outline-secondary mx-1"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="toggleUpdate(postContent.id)">
+                 <button class="btn btn-outline-secondary mx-1"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="toggleUpdate(postContent.id!)">
                     <i class="far fa-edit"></i>
                 </button>
-                <button class="btn btn-outline-secondary mx-1" @click="toggleDelete(postContent.id)">
+                <button class="btn btn-outline-secondary mx-1" @click="toggleDelete(postContent.id!)">
                     <i class="far fa-trash-alt"></i>
                 </button>
             </span>
@@ -41,14 +41,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent,PropType,ref} from 'vue'
+import { defineComponent} from 'vue'
 import Swal from 'sweetalert2'
-import IPost from '@/core/interfaces/post.interface';
-import {PostService} from '@/core/services/post.service';
+import usePostDelete from '@/core/composables/post/usePostDelete'
 
 export default defineComponent({
-    name: "Post",
-    emits: ['postDeleted','toggleView','toggleUpdate'],
+    name: "PostList",
+    emits: ['post-deleted','toggle-view','toggle-update'],
     props:{
         id: {
             type: Number
@@ -73,6 +72,7 @@ export default defineComponent({
     setup(props,{emit}) {
         
         const postContent = props;
+        const {deletePost} = usePostDelete();
         
 
         const toggleDelete = async (id:number) => {
@@ -86,20 +86,20 @@ export default defineComponent({
                 reverseButtons: true
             }).then(async (result) => {
                 if(result.isConfirmed){
-                    const res = await PostService.deletePost(id);
-                    if(res.statusBool){
-                        emit('postDeleted')
+                    const res = await deletePost(id);
+                    if(res.status){
+                        emit('post-deleted')
                     }
                 }
             })
         }
 
         const toggleView = (id:number) => {
-            emit('toggleView',id)
+            emit('toggle-view',id)
         }
 
         const toggleUpdate = (id:number) => {
-            emit('toggleUpdate',id)
+            emit('toggle-update',id)
         }
 
         return{

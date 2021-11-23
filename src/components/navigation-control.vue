@@ -9,10 +9,10 @@
                     <i class="fas fa-chevron-right"></i>
                 </button>
                 <i class="fas fa-search"></i>   
-                <input id="news-search" @keyup="$emit('onSearch',$event)"/>   
+                <input id="news-search" @keyup="$emit('on-search',$event)"/>   
             </div>
             <div class="col-sm-6 ">
-                 <button id="create-btn" class="btn btn-outline-light" @click="addPost">
+                 <button id="create-btn" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="addPost">
                     Add Post
                 </button>
             </div>
@@ -26,8 +26,8 @@ import { defineComponent } from 'vue'
 import {useRouter} from 'vue-router'
 
 export default defineComponent({
-    name: "Controls",
-    emits:['onSearch'],
+    name: "NavigationControl",
+    emits:['on-search','add-post'],
     setup(props,{emit}) {
         const route = useRouter();
         
@@ -40,7 +40,7 @@ export default defineComponent({
         }
 
         const addPost = () => {
-            route.push('/create');
+            emit('add-post')
         }
 
         return{

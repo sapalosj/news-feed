@@ -1,62 +1,50 @@
 <template>
-    <controls @onSearch="search"/>
+    <navigation-control @on-search="search" @add-post="showCreateModal"/>
     <div class="container">
         <div class="row">
             <div class="col-sm-12 mx-auto" v-for="post in filterList" :key="post.id">
-                <post-list v-bind="post" @postDeleted="fetchPosts" @toggleView="viewPost" @toggleUpdate="showUpdateModal"/>
+                <post-list v-bind="post" @post-deleted="fetchPosts" @toggle-view="viewPost" @toggle-update="showUpdateModal"/>
             </div>
         </div>
     </div>
-    <news-update-modal :post="modalContent" @onPostUpdate="fetchPosts"/>
+    <news-update-create-modal :post="modalContent" :action="action" @on-post-update="fetchPosts" />
 </template>
 
 
 <script lang="ts">
-import { defineComponent,ref, reactive, onMounted,computed} from 'vue'
-import Controls from '@/components/Controls.vue'
-import PostList from '@/components/news/PostList.vue'
-import NewsUpdateModal from '@/components/news/NewsUpdateModal.vue'
-import {PostService} from '@/core/services/post.service'
-import IPost from '@/core/interfaces/post.interface'
+import { defineComponent,ref,computed,onMounted,reactive} from 'vue'
+import PostList from '@/components/news/post-list.vue'
+import NewsUpdateCreateModal from '@/components/news/news-update-create-modal.vue'
 import {useRouter} from 'vue-router';
+import NavigationControl from '@/components/navigation-control.vue'
+import RouteName from '@/core/enums/route-name.enum'
+import usePostFetchAll from '@/core/composables/post/usePostFetchAll'
+import usePostFetchById from '@/core/composables/post/usePostFetchById'
+import PostAction from '@/core/enums/post-actions.enum';
+
 
 
 export default defineComponent({
     name:"News",
     components:{
-        Controls,
+        NewsUpdateCreateModal,
         PostList,
-        NewsUpdateModal
+        NavigationControl
     },
     setup() {
 
-       const postLists  = ref<IPost[]>([])
-        const searchItem = ref('');
-
-       const modalContent = reactive <IPost>({
-           id: '',
-           title: '',
-           author:'',
-           content:'',
-           date:''
-       })
+        const {postLists,fetchPosts} = usePostFetchAll()
+        const {modalContent,fetchPostById,clearModalContent} = usePostFetchById();
+        const searchItem  = ref<string>('');
+        const action  = ref<string>(PostAction.CREATE)
+        const showTag = ref<boolean>(true)
+        const router = useRouter();
         
-       const router = useRouter();
-        
-        const fetchPosts = async () =>{
-            const result = await PostService.fetchAll().then(res => res.json())
-            postLists.value = result;
-        }
 
-        const fetchSpecificPost = async (id:number) => {
-            const result = await PostService.fetchPostById(id).then(res => res.json())
-            modalContent.id = id
-            modalContent.title = result.title
-            modalContent.author = result.author
-            modalContent.content = result.content
-            modalContent.date = result.date
-        }
-
+        onMounted(()=>{
+            fetchPosts()
+        })
+    
         const search = (event:any) => {
             searchItem.value = event.target.value
         }
@@ -64,29 +52,33 @@ export default defineComponent({
         const filterList  = computed(() => {
             return postLists.value.filter( post => post.title.toLowerCase().includes(searchItem.value.toLowerCase()))            
         })
-      
-        onMounted(() =>{
-            fetchPosts()
-        })  
 
 
         const viewPost = (postId:number) => {
-           router.push({name:'NewsView',params:{id:postId}});
+            router.push({name:RouteName.NewsView,params:{id:postId}});
         }
 
-
-        const showUpdateModal = (postId:number) => {
-            fetchSpecificPost(postId)
+        const showCreateModal = () => {
+            showTag.value = true
+            clearModalContent()
+            action.value = PostAction.CREATE
         }
-        
+
+        const showUpdateModal = async (postId:number) => {
+            action.value = PostAction.UPDATE
+            fetchPostById(postId)
+        }
+
+    
         return {
-            postLists,
             modalContent,
             viewPost,
             showUpdateModal,
+            showCreateModal,
             fetchPosts,
             filterList,
-            search
+            search,
+            action
         }
     }
 })

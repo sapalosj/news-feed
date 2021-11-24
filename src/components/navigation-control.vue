@@ -11,7 +11,7 @@
                 <i class="fas fa-search"></i>   
                 <input id="news-search" @keyup="$emit('on-search',$event)"/>   
             </div>
-            <div class="col-sm-6 ">
+            <div class="col-sm-6 " v-if="props.show">
                  <button id="create-btn" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="addPost">
                     Add Post
                 </button>
@@ -28,6 +28,12 @@ import {useRouter} from 'vue-router'
 export default defineComponent({
     name: "NavigationControl",
     emits:['on-search','add-post'],
+    props : {
+        show: {
+           type : Boolean,
+           default : true
+        }
+    },
     setup(props,{emit}) {
         const route = useRouter();
         
@@ -44,6 +50,7 @@ export default defineComponent({
         }
 
         return{
+            props,
             prevPage,
             nextPage,
             addPost

@@ -1,5 +1,5 @@
 <template>
-    <navigation-control />
+    <navigation-control :show="false" />
     <div class="container">
         <div class="card mx-auto">
             <div class="card-header">
@@ -31,11 +31,11 @@ export default defineComponent({
     components: { NavigationControl },
     setup() {
 
-        const {post,fetchPostById} = usePostFetchById()
+        const {post,updatePostStateById} = usePostFetchById()
         const route = useRoute();
         
         onMounted( async () => {
-           await fetchPostById(Number(route.params.id[0]))
+           await updatePostStateById(Number(route.params.id[0]))
         })
 
         return{

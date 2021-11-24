@@ -1,29 +1,34 @@
-import IPost from '@/core/interfaces/post.interface';
-import { DateHelper } from '@/core/helpers/date-helper';
 import IErrorResponse from '@/core/interfaces/error-response.interface'
 import HttpRequest from '@/core/enums/api.enum';
 import {api} from '@/core/composables/api-client';
-import ErrorCode from '@/core/enums/error-code.enum';
 import errorResponse from '@/core/helpers/error-response';
-import ErrorMessage from '@/core/enums/error-message.enum';
 import messageResponse from '@/core/helpers/message-response';
 import IMessageResponse from '@/core/interfaces/message-response.interface';
+import { Ref,ref } from 'vue'
 
-const usePostDelete = () => {
+const usePostDelete = async (id:number): Promise<{response: Ref<IMessageResponse | undefined>;error: Ref<IErrorResponse | undefined>;}> =>  {
    
-    const deletePost = async (id:number) : Promise<IMessageResponse|IErrorResponse> => {
+    const response = ref<IMessageResponse>()
+    const error = ref<IErrorResponse>()
+
+    const deletePost = async ()  => {
         try {
-            await api({
+            const res = await api({
                 method: HttpRequest.DELETE,
                 url: `posts/${id}`
             })
-            return messageResponse('Post Updated',true)
-        } catch {
-            return errorResponse(ErrorMessage.INTERNAL_SERVER_ERROR,false,ErrorCode.INTERNAL_SERVER_ERROR)
+            if(!res.ok){
+                throw errorResponse(res.statusText,res.status)
+            }
+            response.value =  messageResponse('Removed!','Post Deleted!')
+        } catch(err) {
+            error.value =  err as IErrorResponse
         }
     }
 
-    return{deletePost}
+    await deletePost()
+
+    return{response, error}
 }
 
 export default usePostDelete

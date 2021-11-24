@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Home from '@/views/home.vue'
-import News from '@/views/news.vue'; 
+import Home from '@/views/home-page.vue'
+import News from '@/views/news-page.vue'; 
 import NewsView from '@/components/news/news-view.vue';
 import RouteName from '@/core/enums/route-name.enum';
 

@@ -7,7 +7,7 @@
             </div>
         </div>
     </div>
-    <news-update-create-modal :post="modalContent" :action="action" @on-post-update="fetchPosts" />
+    <news-update-create-modal :post="post" :action="action" @on-post-update-or-create="fetchPosts" />
 </template>
 
 
@@ -34,7 +34,7 @@ export default defineComponent({
     setup() {
 
         const {postLists,fetchPosts} = usePostFetchAll()
-        const {modalContent,fetchPostById,clearModalContent} = usePostFetchById();
+        const {post,updatePostStateById} = usePostFetchById();
         const searchItem  = ref<string>('');
         const action  = ref<string>(PostAction.CREATE)
         const showTag = ref<boolean>(true)
@@ -66,12 +66,21 @@ export default defineComponent({
 
         const showUpdateModal = async (postId:number) => {
             action.value = PostAction.UPDATE
-            fetchPostById(postId)
+            updatePostStateById(postId)
+        }
+
+        const clearModalContent = () => {
+          post.value.id = undefined,
+          post.value.title = '',
+          post.value.author = '',
+          post.value.content = '',
+          post.value.date = '',
+          post.value.tags = []
         }
 
     
         return {
-            modalContent,
+            post,
             viewPost,
             showUpdateModal,
             showCreateModal,

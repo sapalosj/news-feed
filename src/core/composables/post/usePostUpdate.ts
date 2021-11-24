@@ -3,35 +3,43 @@ import { DateHelper } from '@/core/helpers/date-helper';
 import IErrorResponse from '@/core/interfaces/error-response.interface'
 import HttpRequest from '@/core/enums/api.enum';
 import {api} from '@/core/composables/api-client';
-import ErrorCode from '@/core/enums/error-code.enum';
 import errorResponse from '@/core/helpers/error-response';
-import ErrorMessage from '@/core/enums/error-message.enum';
 import messageResponse from '@/core/helpers/message-response';
 import IMessageResponse from '@/core/interfaces/message-response.interface';
+import {Ref, ref} from 'vue'
 
-const usePostFetchAll = () => {
+
+const usePostUpdate = async (form: Ref<IPost>) : Promise<{response: Ref<IMessageResponse | undefined>; error: Ref<IErrorResponse | undefined>}> => {
+
+    const response = ref<IMessageResponse>()
+    const error = ref<IErrorResponse>()
    
-    const updatePost = async (form,tag:string[]) : Promise<IMessageResponse|IErrorResponse> => {
+    const updatePost = async () => {
         const post : IPost = {
             title : form.value.title,
             author : form.value.author,
             content: form.value.content,    
             date : DateHelper.getCurrentDate(),
-            tags : tag
+            tags : form.value.tags
         }
         try {
-            await api({
+            const res = await api({
                 method:HttpRequest.PATCH,
                 url: `posts/${form.value.id}`,
                 data:post
             })
-            return messageResponse('Post Updated',true)
-        } catch {
-            return errorResponse(ErrorMessage.INTERNAL_SERVER_ERROR,false,ErrorCode.INTERNAL_SERVER_ERROR)
+            if(!res.ok){
+                throw errorResponse(res.statusText,res.status)
+            }
+            response.value = messageResponse('Success!','Post Updated')
+        } catch(err) {
+           error.value = err as IErrorResponse
         }
     }
 
-    return{updatePost}
+    await updatePost()
+
+    return{response, error }
 }
 
-export default usePostFetchAll
+export default usePostUpdate

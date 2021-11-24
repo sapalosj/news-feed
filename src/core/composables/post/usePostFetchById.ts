@@ -1,63 +1,45 @@
-import {ref,reactive} from 'vue';
+import {Ref,ref} from 'vue';
 import IPost from '@/core/interfaces/post.interface';
 import IErrorResponse from '@/core/interfaces/error-response.interface'
 import HttpRequest from '@/core/enums/api.enum';
 import {api} from '@/core/composables/api-client';
-import ErrorCode from '@/core/enums/error-code.enum';
 import errorResponse from '@/core/helpers/error-response';
-import ErrorMessage from '@/core/enums/error-message.enum';
 
-const usePostFetchById = () => {
+const usePostFetchById = (): {post: Ref<IPost>; error: Ref<IErrorResponse | undefined>; updatePostStateById: (id: number) => Promise<void>} => {
   
     const post  = ref <IPost>({
         title:'',
         author:'',
         content:'',
-        date:''
-    });
-
-
-    const modalContent = reactive <IPost>({
-        title: '',
-        author:'',
-        content:'',
         date:'',
-        tags: [] 
-    })
+        tags: []
+    });
 
 
     const error = ref<IErrorResponse>()
   
-    const fetchPostById = async (id:number) => {
+    const updatePostStateById = async (id:number) => {
         try{
             let data = await api({
                 method:HttpRequest.GET,
                 url:`posts/${id}`
             })
-
+            if(!data.ok){
+                throw errorResponse(data.statusText,data.status)
+            }
             let result = await data.json()
-            post.value = result;
-            modalContent.id = result.id
-            modalContent.title = result.title
-            modalContent.author = result.author
-            modalContent.content = result.content
-            modalContent.date = result.date
-            modalContent.tags = result.tags
+            post.value.id = result.id
+            post.value.title = result.title
+            post.value.author = result.author
+            post.value.content = result.content
+            post.value.date = result.date
+            post.value.tags = result.tags
         }
-        catch{
-            error.value = errorResponse(ErrorMessage.INTERNAL_SERVER_ERROR,false,ErrorCode.INTERNAL_SERVER_ERROR)
+        catch(err){
+            error.value = err as IErrorResponse
         }
     }
-    const clearModalContent = () => {
-        modalContent.id = undefined
-        modalContent.title = ''
-        modalContent.author = ''
-        modalContent.content = ''
-        modalContent.date = ''
-        modalContent.tags = []
-    }
-
-    return{post,error,modalContent,fetchPostById,clearModalContent}
+    return{post,error,updatePostStateById}
 }
 
 export default usePostFetchById

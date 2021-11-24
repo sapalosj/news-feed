@@ -48,16 +48,16 @@ import IPost from '@/core/interfaces/post.interface';
 import usePostUpdate from '@/core/composables/post/usePostUpdate'
 import usePostCreate from '@/core/composables/post/usePostCreate'
 import { defineComponent, PropType,ref } from 'vue'
-import Swal from 'sweetalert2'
 import PostAction from '@/core/enums/post-actions.enum';
 import SmartTags from '@/components/smart-tags.vue'
+import showSweetAlert from '@/core/helpers/swal-helper';
 
 export default defineComponent({
     name:'NewsUpdateCreateModal',
     components:{
       SmartTags
     },
-    emits:['on-post-update'],
+    emits:['on-post-update-or-create'],
     props : {
         post :{
           type:Object  as PropType<IPost>,
@@ -66,7 +66,7 @@ export default defineComponent({
             title : '',
             author : '',
             content: '',
-            tags: [] as string[]
+            tags: []
           }
         },
         action: {
@@ -76,29 +76,33 @@ export default defineComponent({
     },
     setup(props,{emit}) {
 
-        const tag  = ref<string[]>([]);
         const content = ref<IPost>(props.post);
-        const {updatePost} = usePostUpdate()
-        const {insertPost} = usePostCreate()
+      
 
         const updateOrCreate = async () => {
           if(isFormValid()){
-            const res = props.action == PostAction.CREATE ?  await insertPost(content,tag.value) : await updatePost(content,tag.value)
-            if(res.status){
-              Swal.fire('Success!', res.message,'success')
-              emit('on-post-update')
-            }else{
-              Swal.fire('Error', res.message,'error')
-            }
+            props.action == PostAction.CREATE ?  await createPost() : await updatePost()
           }
         }
 
+        
+        const updatePost = async () => {
+          const {response, error} = await usePostUpdate(content)
+          showSweetAlert(response,error) ? emit('on-post-update-or-create') : null
+        }
+
+
+        const createPost = async () => {
+          const {response, error} = await usePostCreate(content)
+          showSweetAlert(response,error) ? emit('on-post-update-or-create') : null
+        }
+
         const defineAction = () => {
-           return props.action ==  PostAction.CREATE ? 'Create' : 'Update'
+           return props.action
         }
 
         const tagValue = (tagsArray : string[]) => {
-            tag.value = tagsArray
+            content.value.tags = tagsArray
         }
 
         const isFormValid  = () : boolean => {
@@ -106,7 +110,7 @@ export default defineComponent({
             let valid = true;
             Array.prototype.slice.call(forms).forEach(function (form) {
                 form.classList.remove('is-invalid')
-                if(form.value == ''){
+                if(form.value === ''){
                     form.classList.add('is-invalid')
                     valid = false
                 }  
@@ -121,10 +125,7 @@ export default defineComponent({
             })
         }
 
-      
-
         return {
-          tag,
           content,
           updateOrCreate,
           tagValue,

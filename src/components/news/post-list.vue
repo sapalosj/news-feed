@@ -43,7 +43,7 @@
 <script lang="ts">  
 import { defineComponent} from 'vue'
 import Swal from 'sweetalert2'
-import usePostDelete from '@/core/composables/post/usePostDelete'
+import usePostDelete from '@/core/composables/post/use-post-delete'
 import showSweetAlert from '@/core/helpers/swal-helper'
 
 export default defineComponent({

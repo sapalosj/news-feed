@@ -45,8 +45,8 @@
 
 <script lang="ts">
 import IPost from '@/core/interfaces/post.interface';
-import usePostUpdate from '@/core/composables/post/usePostUpdate'
-import usePostCreate from '@/core/composables/post/usePostCreate'
+import usePostUpdate from '@/core/composables/post/use-post-update'
+import usePostCreate from '@/core/composables/post/use-post-create'
 import { defineComponent, PropType,ref } from 'vue'
 import PostAction from '@/core/enums/post-actions.enum';
 import SmartTags from '@/components/smart-tags.vue'

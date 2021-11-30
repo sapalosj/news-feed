@@ -23,7 +23,7 @@
 <script lang="ts">
 import NavigationControl from '@/components/navigation-control.vue'
 import { defineComponent, onMounted } from 'vue'
-import usePostFetchById from '@/core/composables/post/usePostFetchById'
+import usePostFetchById from '@/core/composables/post/use-post-fetch-by-id'
 import {useRoute} from 'vue-router'
 
 export default defineComponent({

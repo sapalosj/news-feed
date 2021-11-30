@@ -6,10 +6,11 @@ import errorResponse from '@/core/helpers/error-response';
 import messageResponse from '@/core/helpers/message-response';
 import IMessageResponse from '@/core/interfaces/message-response.interface';
 import IErrorResponse from '@/core/interfaces/error-response.interface';
+import IComposableResponse from '@/core/interfaces/composable-response.interface';
 import {Ref,ref} from 'vue'
 
 
-const usePostCreate = async (form: Ref<IPost>): Promise<{response: Ref<IMessageResponse | undefined>;error: Ref<IErrorResponse | undefined>;}> => {
+const usePostCreate = async (form: Ref<IPost>): Promise<IComposableResponse> => {
 
     const response = ref<IMessageResponse>()
     const error = ref<IErrorResponse>()

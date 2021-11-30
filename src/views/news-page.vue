@@ -18,8 +18,8 @@ import NewsUpdateCreateModal from '@/components/news/news-update-create-modal.vu
 import {useRouter} from 'vue-router';
 import NavigationControl from '@/components/navigation-control.vue'
 import RouteName from '@/core/enums/route-name.enum'
-import usePostFetchAll from '@/core/composables/post/usePostFetchAll'
-import usePostFetchById from '@/core/composables/post/usePostFetchById'
+import usePostFetchAll from '@/core/composables/post/use-post-fetch-all'
+import usePostFetchById from '@/core/composables/post/use-post-fetch-by-id'
 import PostAction from '@/core/enums/post-actions.enum';
 
 

@@ -40,10 +40,11 @@
     </div>
 </template>
 
-<script lang="ts">
+<script lang="ts">  
 import { defineComponent} from 'vue'
 import Swal from 'sweetalert2'
-import usePostDelete from '@/core/composables/post/usePostDelete'
+import usePostDelete from '@/core/composables/post/use-post-delete'
+import showSweetAlert from '@/core/helpers/swal-helper'
 
 export default defineComponent({
     name: "PostList",
@@ -72,7 +73,7 @@ export default defineComponent({
     setup(props,{emit}) {
         
         const postContent = props;
-        const {deletePost} = usePostDelete();
+      
         
 
         const toggleDelete = async (id:number) => {
@@ -86,10 +87,8 @@ export default defineComponent({
                 reverseButtons: true
             }).then(async (result) => {
                 if(result.isConfirmed){
-                    const res = await deletePost(id);
-                    if(res.status){
-                        emit('post-deleted')
-                    }
+                    const {response, error} = await usePostDelete(id);
+                    showSweetAlert(response,error) ? emit('post-deleted') : null
                 }
             })
         }

@@ -6,6 +6,6 @@ interface IPost {
     author: string,
     content: string,
     date: string,
-    tags?: Array<String>,
+    tags: string[]
 }
   export default IPost

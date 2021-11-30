@@ -1,10 +1,10 @@
 
 import IMessageResponse from "../interfaces/message-response.interface"
 
-const messageResponse = (message:string,status:boolean) : IMessageResponse =>{
+const messageResponse = (title:string,message:string) : IMessageResponse =>{
     const response = {
-        message,
-        status
+        title,
+        message
     }
     return response
 }

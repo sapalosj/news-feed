@@ -7,7 +7,7 @@
             </div>
         </div>
     </div>
-    <news-update-create-modal :post="modalContent" :action="action" @on-post-update="fetchPosts" />
+    <news-update-create-modal :post="post" :action="action" @on-post-update-or-create="fetchPosts" />
 </template>
 
 
@@ -15,12 +15,13 @@
 import { defineComponent,ref,computed,onMounted,reactive} from 'vue'
 import PostList from '@/components/news/post-list.vue'
 import NewsUpdateCreateModal from '@/components/news/news-update-create-modal.vue'
-import {useRouter} from 'vue-router';
+import {useRouter} from 'vue-router'
 import NavigationControl from '@/components/navigation-control.vue'
 import RouteName from '@/core/enums/route-name.enum'
-import usePostFetchAll from '@/core/composables/post/usePostFetchAll'
-import usePostFetchById from '@/core/composables/post/usePostFetchById'
-import PostAction from '@/core/enums/post-actions.enum';
+import usePostFetchAll from '@/core/composables/post/use-post-fetch-all'
+import usePostFetchById from '@/core/composables/post/use-post-fetch-by-id'
+import PostAction from '@/core/enums/post-actions.enum'
+import IPost from '@/core/interfaces/post.interface'
 
 
 
@@ -34,7 +35,15 @@ export default defineComponent({
     setup() {
 
         const {postLists,fetchPosts} = usePostFetchAll()
-        const {modalContent,fetchPostById,clearModalContent} = usePostFetchById();
+        
+        const post  = ref <IPost>({
+            title:'',
+            author:'',
+            content:'',
+            date:'',
+            tags: []
+        });
+
         const searchItem  = ref<string>('');
         const action  = ref<string>(PostAction.CREATE)
         const showTag = ref<boolean>(true)
@@ -66,12 +75,27 @@ export default defineComponent({
 
         const showUpdateModal = async (postId:number) => {
             action.value = PostAction.UPDATE
-            fetchPostById(postId)
+            const { post: result} = await usePostFetchById(postId);
+            post.value.id = result.value.id
+            post.value.title = result.value.title
+            post.value.author = result.value.author
+            post.value.content = result.value.content
+            post.value.date = result.value.date
+            post.value.tags = result.value.tags
+        }
+
+        const clearModalContent = () => {
+          post.value.id = undefined,
+          post.value.title = '',
+          post.value.author = '',
+          post.value.content = '',
+          post.value.date = '',
+          post.value.tags = []
         }
 
     
         return {
-            modalContent,
+            post,
             viewPost,
             showUpdateModal,
             showCreateModal,

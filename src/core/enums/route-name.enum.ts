@@ -4,8 +4,6 @@ enum RouteName {
     NewsView = 'NewsView',
     NewsCreate = 'NewsCreate',
     NewsEdit = 'NewsEdit'
-
-
 }
 
 export default RouteName;

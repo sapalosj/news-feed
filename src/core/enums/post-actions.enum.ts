@@ -1,6 +1,6 @@
 enum PostAction {
-   CREATE = 'CREATE',
-   UPDATE = 'UPDATE'
+   CREATE = 'Create',
+   UPDATE = 'Update'
 }
 
 export default PostAction;

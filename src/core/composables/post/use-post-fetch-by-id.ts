@@ -5,7 +5,7 @@ import HttpRequest from '@/core/enums/api.enum';
 import {api} from '@/core/composables/api-client';
 import errorResponse from '@/core/helpers/error-response';
 
-const usePostFetchById = (): {post: Ref<IPost>; error: Ref<IErrorResponse | undefined>; updatePostStateById: (id: number) => Promise<void>} => {
+const usePostFetchById = async (id: number): Promise<{post: Ref<IPost>; error: Ref<IErrorResponse | undefined>}> => {
   
     const post  = ref <IPost>({
         title:'',
@@ -18,7 +18,7 @@ const usePostFetchById = (): {post: Ref<IPost>; error: Ref<IErrorResponse | unde
 
     const error = ref<IErrorResponse>()
   
-    const updatePostStateById = async (id:number) => {
+    const updatePostStateById = async () => {
         try{
             let data = await api({
                 method:HttpRequest.GET,
@@ -39,7 +39,10 @@ const usePostFetchById = (): {post: Ref<IPost>; error: Ref<IErrorResponse | unde
             error.value = err as IErrorResponse
         }
     }
-    return{post,error,updatePostStateById}
+
+   await updatePostStateById()
+
+    return{post,error}
 }
 
 export default usePostFetchById

@@ -7,6 +7,7 @@
           <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit molestias, numquam facilis ea consectetur</p>
           <button class="btn btn-outline-light btn-lg" @click="redirect">Get Started!</button>
         </div>
+        <h1>Test</h1>
       <div class="col-sm-6">
         <img src="../assets/socmed.png" alt="Mark Zuckerberg?">
       </div>
